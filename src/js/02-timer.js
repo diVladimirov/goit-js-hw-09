@@ -14,18 +14,19 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     const selectDate = selectedDates[0];
-    const currentDate = new Date();
+    const currentDate = Date.now();
+    console.log(currentDate);
 
     // console.log(selectDate.getTime());
     // console.log(currentDate.getTime());
-    if (selectDate.getTime() > currentDate.getTime()) {
+    if (selectDate.getTime() > currentDate) {
       btnStart.removeAttribute('disabled');
     } else {
       window.alert('Please choose a date in the future');
     }
 
     setInterval(() => {
-      const deltaTime = currentDate.getTime() - selectDate.getTime();
+      const deltaTime = currentDate - selectDate.getTime();
       convertMs(deltaTime);
     }, 1000);
   },
