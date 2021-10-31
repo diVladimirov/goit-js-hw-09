@@ -20,6 +20,7 @@ const refs = {
 // const seconds = document.querySelector('span[data-seconds]');
 
 let selectDate = null;
+let timerId = null;
 
 const options = {
   enableTime: true,
@@ -29,14 +30,11 @@ const options = {
   onClose(selectedDates) {
     selectDate = selectedDates[0];
     const currentDate = Date.now();
-    // console.log(currentDate);
 
-    // console.log(selectDate);
-    // console.log(currentDate);
     if (selectDate.getTime() > currentDate) {
       btnStart.removeAttribute('disabled');
     } else {
-      window.alert('Please choose a date in the future');
+      Notiflix.Notify.failure('Please choose a date in the future');
     }
   },
 };
@@ -44,10 +42,10 @@ const options = {
 btnStart.addEventListener('click', onBtnStartClick);
 
 function onBtnStartClick() {
-  setInterval(() => {
+  timerId = setInterval(() => {
     const deltaTime = selectDate.getTime() - Date.now();
     // convertMs(deltaTime);
-    // console.log('разница', deltaTime);
+    console.log('разница', deltaTime);
     const dif = convertMs(deltaTime);
     // console.log(dif);
     // days.textContent = addLeadingZero(dif.days);
@@ -56,9 +54,10 @@ function onBtnStartClick() {
     // seconds.textContent = addLeadingZero(dif.seconds);
 
     for (const [key, value] of Object.entries(dif)) {
-      console.log(key);
-      console.log(value);
       refs[key].textContent = addLeadingZero(value);
+    }
+    if (deltaTime <= 1000) {
+      clearInterval(timerId);
     }
   }, 1000);
 }
