@@ -2,10 +2,24 @@
 import flatpickr from 'flatpickr';
 // Дополнительный импорт стилей
 import 'flatpickr/dist/flatpickr.min.css';
+import Notiflix from 'notiflix';
 
 const datePicker = document.querySelector('input#datetime-picker');
 
 const btnStart = document.querySelector('button[data-start]');
+
+const refs = {
+  days: document.querySelector('span[data-days]'),
+  hours: document.querySelector('span[data-hours]'),
+  minutes: document.querySelector('span[data-minutes]'),
+  seconds: document.querySelector('span[data-seconds]'),
+};
+// const days = document.querySelector('span[data-days]');
+// const hours = document.querySelector('span[data-hours]');
+// const minutes = document.querySelector('span[data-minutes]');
+// const seconds = document.querySelector('span[data-seconds]');
+
+let selectDate = null;
 
 const options = {
   enableTime: true,
@@ -13,29 +27,40 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    const selectDate = selectedDates[0];
+    selectDate = selectedDates[0];
     const currentDate = Date.now();
-    console.log(currentDate);
+    // console.log(currentDate);
 
-    // console.log(selectDate.getTime());
-    // console.log(currentDate.getTime());
+    // console.log(selectDate);
+    // console.log(currentDate);
     if (selectDate.getTime() > currentDate) {
       btnStart.removeAttribute('disabled');
     } else {
       window.alert('Please choose a date in the future');
     }
-
-    setInterval(() => {
-      const deltaTime = currentDate - selectDate.getTime();
-      convertMs(deltaTime);
-    }, 1000);
   },
 };
 
 btnStart.addEventListener('click', onBtnStartClick);
 
 function onBtnStartClick() {
-  console.log(1);
+  setInterval(() => {
+    const deltaTime = selectDate.getTime() - Date.now();
+    // convertMs(deltaTime);
+    // console.log('разница', deltaTime);
+    const dif = convertMs(deltaTime);
+    // console.log(dif);
+    // days.textContent = addLeadingZero(dif.days);
+    // hours.textContent = addLeadingZero(dif.hours);
+    // minutes.textContent = addLeadingZero(dif.minutes);
+    // seconds.textContent = addLeadingZero(dif.seconds);
+
+    for (const [key, value] of Object.entries(dif)) {
+      console.log(key);
+      console.log(value);
+      refs[key].textContent = addLeadingZero(value);
+    }
+  }, 1000);
 }
 
 init();
@@ -65,5 +90,5 @@ function convertMs(ms) {
 }
 
 function addLeadingZero(value) {
-  return padStart();
+  return String(value).padStart(2, '0');
 }
