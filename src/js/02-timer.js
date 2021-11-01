@@ -58,6 +58,7 @@ function onBtnStartClick() {
     }
     if (deltaTime <= 1000) {
       clearInterval(timerId);
+      Notiflix.Notify.info('Timer end');
     }
   }, 1000);
 }
