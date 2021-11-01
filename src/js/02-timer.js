@@ -61,6 +61,7 @@ function onBtnStartClick() {
       Notiflix.Notify.info('Timer end');
     }
   }, 1000);
+  btnStart.setAttribute('disabled', 'disabled');
 }
 
 init();
